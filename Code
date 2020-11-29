@@ -1,0 +1,98 @@
+const int relay =  3;
+const int trigPin = 10;
+    const int echoPin = 11;
+    const int buzz = 2;
+    int state=0;
+    int a=0;
+    long duration;
+    int distanceCm, distanceInch;
+    float vout;
+ void setup()
+ {
+ pinMode(relay,OUTPUT);
+ pinMode(trigPin, OUTPUT);
+    pinMode(buzz, OUTPUT);
+    pinMode(echoPin, INPUT);
+    digitalWrite(buzz,HIGH);
+ digitalWrite(relay,HIGH);
+ Serial.begin(9600);
+ delay(100);
+ }
+ void loop()
+ {
+   Serial.println(a);
+   digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigPin, LOW);
+    duration = pulseIn(echoPin, HIGH);
+    distanceCm= duration*0.034/2;
+    distanceInch = duration*0.0133/2;
+    //Serial.print("Distance in cm: ");
+    //Serial.println(distanceCm);
+    vout=distanceCm;
+ unsigned char in=0;
+ if (Serial.available())
+ {
+ delay(100);
+ while (Serial.available() > 0)
+ in = Serial.read();
+ 
+ }
+ if ((in == 57)&&(a==0)) // ASCII code of 1
+ {
+      a=1;
+    // in=49;
+ }
+ if((vout<=30) && (vout>=3)&& (a==1))
+    {
+    digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigPin, LOW);
+    duration = pulseIn(echoPin, HIGH);
+    distanceCm= duration*0.034/2;
+    distanceInch = duration*0.0133/2;
+    Serial.print("Distance in cm: ");
+    Serial.println(distanceCm);
+    vout=distanceCm;
+    digitalWrite(buzz,HIGH);
+     digitalWrite(relay,HIGH);
+}
+ if((vout>=31) && (a==1))
+    {
+    digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigPin, LOW);
+    duration = pulseIn(echoPin, HIGH);
+    distanceCm= duration*0.034/2;
+    distanceInch = duration*0.0133/2;
+    Serial.print("Distance in cm: ");
+    Serial.println(distanceCm);
+    vout=distanceCm;
+    digitalWrite(buzz,LOW);
+     digitalWrite(relay,LOW);
+}
+ if (in == 56) // ASCII code of 1
+ {
+   a=0;
+ digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigPin, LOW);
+    duration = pulseIn(echoPin, HIGH);
+    distanceCm= duration*0.034/2;
+    distanceInch = duration*0.0133/2;
+    Serial.print("Distance in cm: ");
+    Serial.println(distanceCm);
+    vout=distanceCm;
+    digitalWrite(buzz,HIGH);
+     digitalWrite(relay,HIGH);
+ }
+
+ }
